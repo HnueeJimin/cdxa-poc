@@ -1,0 +1,24 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "attestations": [
+    {
+      "subject": [
+        { "name": "hello", "hashes": { "SHA-256": "abc123..." } }
+      ],
+      "claims": [
+        { "name": "build.command", "value": "gcc hello.c -o hello" },
+        { "name": "build.compiler.path", "value": "/usr/bin/gcc" },
+        { "name": "build.environment", "value": "Ubuntu 22.04, Kernel 6.8" }
+      ],
+      "evidence": [
+        { "type": "log", "contentType": "text/plain", "content": "build.log" }
+      ],
+      "signature": {
+        "issuer": "hpsc-jimin@hpsclab.hannam.ac.kr",
+        "algorithm": "ecdsa-p256-sha256",
+        "value": "MEYCIQDV..."
+      }
+    }
+  ]
+}

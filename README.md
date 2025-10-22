@@ -23,9 +23,42 @@
 
 ---
 
-## 🧪 실행 절차
+## 🧩 실험 구조 요약
 
-### 1. 환경 설정
+| 구분 | 설명 |
+|------|------|
+| **정상 빌드** | 표준 `gcc`를 사용해 `hello.c`를 빌드 |
+| **오염 빌드** | 래퍼 스크립트 `compromised-gcc`를 통해 악의적 코드를 삽입 |
+| **차이점** | 동일한 결과물이 생성되지만, CDXA의 `claims`에서 빌드 명령/경로/서명자 차이가 존재 |
+| **검증기(Verifier)** | 서명 및 빌드 명령 정책을 기준으로 무결성 판단 수행 |
+
+---
+
+## 🧠 소스 코드 설명
+
+### 1. `hello.c`
+PoC에서는 가장 단순한 C 프로그램을 사용합니다.
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello, Secure World!\n");
+    return 0;
+}
+```
+
+## ⚙️ 빌드 및 BOM 생성 절차
+정상빌드
+```bash
+./build_clean.sh # hello-clean, bom.clean.json 생성
+```
+
+오염빌드
+```bash
+./build_borked.sh # hello-borked, bom.borked.json 생성
+```
+
+### etc. 환경 설정
 ```bash
 sudo apt install gcc jq
 npm install -D @cyclonedx/cdxgen@latest   # Node 22 환경 필요
