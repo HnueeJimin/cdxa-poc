@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+*.sha256
+*.sig
+cosign.key
+cosign.pub

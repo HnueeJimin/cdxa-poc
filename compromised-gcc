@@ -1,0 +1,28 @@
+#!/bin/bash
+# $1.. are forwarded to real gcc
+# simple simulation: if first arg is a .c file, create a modified copy that adds backdoor
+REAL_GCC=/usr/bin/gcc
+TMPDIR=$(mktemp -d)
+# find .c input file (naive)
+for arg in "$@"; do
+  case "$arg" in
+    *.c) SRC="$arg";;
+  esac
+done
+if [ -n "$SRC" ]; then
+  cp "$SRC" "$TMPDIR/$SRC"
+  # append a "backdoor" function to the copied source
+  cat >> "$TMPDIR/$SRC" <<'CENDO'
+/* BACKDOOR_INJECTION */
+#include <unistd.h>
+void __attribute__((constructor)) backdoor_init() {
+    /* NOTE: this is just a demo (prints hidden marker). */
+    write(1, "/*INJECTED-BACKDOOR*/\n", 22);
+}
+CENDO
+  # call real gcc with modified source and original other args
+  cd "$TMPDIR"
+  exec "$REAL_GCC" "$SRC" "${@:1}" 
+else
+  exec "$REAL_GCC" "$@"
+fi
